@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CV Reviewer | M12SC Logistics</title>
+    <meta name="description" content="Công cụ đánh giá CV thông minh dựa trên JD - M12SC Logistics Operations">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-text">
+                    <span class="logo-name">M12 Sorting Centers</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="header-badge"><i class="ph ph-sparkle"></i> AI CV Reviewer</span>
+            </div>
+        </div>
+
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <img src="assets/hero.png?v=2" alt="Kho vận M12SC" class="hero-img">
+            <div class="hero-overlay">
+                <h1 class="hero-title">ĐÁNH GIÁ CV - M12 HR TEAM</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <div class="app-container">
+        <main class="main-content">
+
+            <!-- Left Column: JD Input -->
+            <section class="input-section" id="jd-section">
+                <div class="section-header">
+                    <h2><i class="ph ph-briefcase"></i> Mô tả công việc (JD)</h2>
+                </div>
+
+                <div class="tabs" id="jd-tabs">
+                    <button class="tab-btn active" data-tab="jd-paste" data-group="jd">Dán văn bản</button>
+                    <button class="tab-btn" data-tab="jd-upload" data-group="jd">Tải file lên</button>
+                </div>
+
+                <!-- JD: Paste -->
+                <div class="tab-content active" id="jd-paste-tab">
+                    <div class="input-wrapper">
+                        <textarea id="jdInput" placeholder="Dán nội dung Mô tả công việc (Job Description) vào đây..."></textarea>
+                    </div>
+                </div>
+
+                <!-- JD: Upload -->
+                <div class="tab-content" id="jd-upload-tab">
+                    <div class="upload-area" id="jdDropZone">
+                        <i class="ph ph-cloud-arrow-up upload-icon"></i>
+                        <p>Kéo thả file JD vào đây hoặc <span class="browse-link" id="jdBrowseLink">chọn file</span></p>
+                        <p class="file-hint">Hỗ trợ PDF, DOCX</p>
+                        <input type="file" id="jdFileInput" hidden accept=".pdf,.doc,.docx">
+                    </div>
+                    <div id="jdFilePreview" class="file-preview-bar hidden">
+                        <i class="ph ph-file-pdf"></i>
+                        <span id="jdFileName">jd_file.pdf</span>
+                        <button class="remove-file" id="jdRemoveFileBtn"><i class="ph ph-x"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: CV Input -->
+            <section class="input-section" id="cv-section">
+                <div class="section-header">
+                    <h2><i class="ph ph-file-user"></i> Hồ sơ ứng viên (CV)</h2>
+                </div>
+
+                <div class="tabs" id="cv-tabs">
+                    <button class="tab-btn active" data-tab="cv-paste" data-group="cv">Dán văn bản</button>
+                    <button class="tab-btn" data-tab="cv-upload" data-group="cv">Tải file lên</button>
+                </div>
+
+                <!-- CV: Paste -->
+                <div class="tab-content active" id="cv-paste-tab">
+                    <div class="input-wrapper">
+                        <textarea id="cvInput" placeholder="Dán nội dung CV của ứng viên vào đây..."></textarea>
+                    </div>
+                </div>
+
+                <!-- CV: Upload -->
+                <div class="tab-content" id="cv-upload-tab">
+                    <div class="upload-area" id="cvDropZone">
+                        <i class="ph ph-cloud-arrow-up upload-icon"></i>
+                        <p>Kéo thả file CV vào đây hoặc <span class="browse-link" id="cvBrowseLink">chọn file</span></p>
+                        <p class="file-hint">Hỗ trợ PDF, DOCX</p>
+                        <input type="file" id="cvFileInput" hidden accept=".pdf,.doc,.docx">
+                    </div>
+                    <div id="cvFilePreview" class="file-preview-bar hidden">
+                        <i class="ph ph-file-pdf"></i>
+                        <span id="cvFileName">cv_ung_vien.pdf</span>
+                        <button class="remove-file" id="cvRemoveFileBtn"><i class="ph ph-x"></i></button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Action -->
+        <div class="action-area">
+            <button id="analyzeBtn" class="primary-btn">
+                <i class="ph ph-magic-wand"></i> Phân tích CV ngay
+            </button>
+        </div>
+
+        <!-- ===== RESULTS ===== -->
+        <section id="resultsSection" class="results-section hidden">
+            <div class="results-header">
+                <h2>Kết quả phân tích</h2>
+                <div class="conclusion-badge" id="conclusionBadge"></div>
+            </div>
+
+            <div class="results-grid">
+                <div class="scores-container">
+                    <h3>Chi tiết đánh giá</h3>
+                    <div class="score-list" id="scoreList"></div>
+                </div>
+
+                <div class="feedback-container">
+                    <div class="card reasons-card">
+                        <h3><i class="ph ph-list-checks"></i> Lý do chính</h3>
+                        <ul id="mainReasonsList" class="reasons-list"></ul>
+                    </div>
+                    <div class="card redflags-card">
+                        <h3><i class="ph ph-warning-circle"></i> Red Flags</h3>
+                        <ul id="redFlagsList" class="redflags-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>AI đang phân tích và so sánh CV với JD...</p>
+            <span class="loading-tips">Quá trình này có thể mất vài giây.</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
